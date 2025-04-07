@@ -35,7 +35,7 @@ class _RestaurantState extends State<Restaurant> {
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
-
+              mainAxisExtent: 300
           ),
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
