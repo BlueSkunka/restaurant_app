@@ -30,81 +30,94 @@ class _RestaurantState extends State<Restaurant> {
       appBar: AppBar(title: Text('Gourmet Brasserie'),),
       body: SizedBox(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height,
         // Affichage des catégories
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
-              mainAxisExtent: 300
+              mainAxisExtent: 400
           ),
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
           // Affichage des plats par catégories
           itemBuilder: (BuildContext context, int index) {
             Category category = categories[index];
+
+            int size;
+            if (category == Category.entree) {
+              size = entres.length;
+            } else if (category == Category.plat) {
+              size = plats.length;
+            } else {
+              size = desserts.length;
+            }
+
             return Container(
               color: category.color,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 2,
-                children: [
-                  Text(category.title),
-                  ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    // A définir automatiquement après
-                    itemCount: 2,
-                    itemBuilder: (BuildContext context, int index) {
-                      Plate plat;
+              // TODO : Scroll vertical
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 20,
+                  children: [
+                    Text(category.title),
+                    ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        // A définir automatiquement après
+                        itemCount: size,
+                        itemBuilder: (BuildContext context, int index) {
+                          Plate plat;
 
-                      if (category == Category.entree) {
-                        plat = entres[index];
-                      } else if (category == Category.plat) {
-                        plat = plats[index];
-                      } else {
-                        plat = desserts[index];
-                      }
+                          if (category == Category.entree) {
+                            plat = entres[index];
+                          } else if (category == Category.plat) {
+                            plat = plats[index];
+                          } else {
+                            plat = desserts[index];
+                          }
 
-                      // Carte d'un plat
-                      return Card(
-                        margin: const EdgeInsets.all(20),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                  plat.image,
-                                width: 100,
-                                height: 100,
+                          // Carte d'un plat
+                          return Card(
+                            margin: const EdgeInsets.all(20),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.network(
+                                    plat.image,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                  Text(
+                                    plat.title,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(plat.description,
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w200,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.blueGrey
+                                    ),
+                                  ),
+                                  Text(plat.price.toString())
+                                ],
                               ),
-                              Text(
-                                plat.title,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(plat.description,
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w200,
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.blueGrey
-                                ),
-                              ),
-                              Text(plat.price.toString())
-                            ],
-                          ),
-                        ),
-                      );
-                  })
-                ],
-              ),
+                            ),
+                          );
+                        })
+                  ],
+                ),
+              )
             );
           }),
         ),
@@ -128,11 +141,17 @@ enum Category {
 
 enum Plate {
   pouce(title: 'Pouce', image: 'https://static.vecteezy.com/system/resources/thumbnails/009/308/374/small_2x/thumb-up-on-transparent-background-file-png.png', price: 4.50, description: 'Un pouce bien grillé à la graisse humaine', category: Category.entree),
+  teton(title: 'Téton', image: 'https://static.vecteezy.com/system/resources/thumbnails/009/308/374/small_2x/thumb-up-on-transparent-background-file-png.png', price: 4.50, description: 'Un pouce bien grillé à la graisse humaine', category: Category.entree),
   cartilage(title: 'Pignons de cartilage', image: 'https://cdn.3d4medical.com/complete_anatomy-userdata/video-sticky/61/326c4900eb.webp', price: 5.50, description: 'Des pignons de cartilage de nez, rôti à la broche', category: Category.entree),
+  ongles(title: 'Purée d\'ongles', image: 'https://cdn.3d4medical.com/complete_anatomy-userdata/video-sticky/61/326c4900eb.webp', price: 5.50, description: 'Des pignons de cartilage de nez, rôti à la broche', category: Category.entree),
   mollet(title: 'Mollet', image: 'https://www.osteopathes.paris/wp-content/uploads/2022/12/Douleur-mollet.png', price: 13.50, description: 'Un bon mollet poêlé accompagné d\'une salade de cheveux blond', category: Category.plat),
+  cuisse(title: 'Cuisse', image: 'https://www.osteopathes.paris/wp-content/uploads/2022/12/Douleur-mollet.png', price: 13.50, description: 'Un bon mollet poêlé accompagné d\'une salade de cheveux blond', category: Category.plat),
   ribs(title: 'Ribs de côtes', image: 'https://lh5.googleusercontent.com/proxy/6ldecagohf34CCDVnPzIwimkSek1MUpC3N7O61sQa-7AwZBqxCnTInkGG9O_GQGkiNub3RsWqEPE8Bbupc6e-KIjKg', price: 14.50, description: 'Des ribs de côtes cuites au grill accompagné d\'une mixture d\'ongle sués', category: Category.plat),
+  triceps(title: 'Triceps ridé', image: 'https://lh5.googleusercontent.com/proxy/6ldecagohf34CCDVnPzIwimkSek1MUpC3N7O61sQa-7AwZBqxCnTInkGG9O_GQGkiNub3RsWqEPE8Bbupc6e-KIjKg', price: 14.50, description: 'Des ribs de côtes cuites au grill accompagné d\'une mixture d\'ongle sués', category: Category.plat),
   oreille(title: 'Crème d\'oreille', image: 'https://static.vecteezy.com/system/resources/previews/046/340/292/non_2x/ear-clipart-design-illustration-free-png.png', price: 6.50, description: 'Une crème d\'oreilles caramélisées avec du pain brioché', category: Category.dessert),
-  graisse(title: 'Glace à la graisse', image: 'https://www.chirurgie-plastique-france.com/wp-content/uploads/2022/05/liposuccion-ventre-marseille.webp', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert);
+  graisse(title: 'Glace à la graisse', image: 'https://www.chirurgie-plastique-france.com/wp-content/uploads/2022/05/liposuccion-ventre-marseille.webp', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert),
+  fesse(title: 'Fesse musclée', image: 'https://www.chirurgie-plastique-france.com/wp-content/uploads/2022/05/liposuccion-ventre-marseille.webp', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert),
+  joue(title: 'Joue rosée', image: 'https://www.chirurgie-plastique-france.com/wp-content/uploads/2022/05/liposuccion-ventre-marseille.webp', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert);
 
 
   final String title;
