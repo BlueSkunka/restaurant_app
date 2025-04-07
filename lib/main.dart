@@ -32,15 +32,18 @@ class _RestaurantState extends State<Restaurant> {
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         // Affichage des catégories
-        child: GridView(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+
+          ),
           scrollDirection: Axis.horizontal,
+          itemCount: categories.length,
           // Affichage des plats par catégories
-          children: List.generate(categories.length, (index) {
+          itemBuilder: (BuildContext context, int index) {
             Category category = categories[index];
             return Container(
               color: category.color,
-              width: 50,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 spacing: 2,
@@ -54,7 +57,7 @@ class _RestaurantState extends State<Restaurant> {
                     itemBuilder: (BuildContext context, int index) {
                       Plate plat;
 
-                      if (category == Category.plat) {
+                      if (category == Category.entree) {
                         plat = entres[index];
                       } else if (category == Category.plat) {
                         plat = plats[index];
@@ -74,9 +77,26 @@ class _RestaurantState extends State<Restaurant> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(plat.image),
-                              Text(plat.title),
-                              Text(plat.description),
+                              Image.network(
+                                  plat.image,
+                                width: 100,
+                                height: 100,
+                              ),
+                              Text(
+                                plat.title,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(plat.description,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w200,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.blueGrey
+                                ),
+                              ),
                               Text(plat.price.toString())
                             ],
                           ),
@@ -88,8 +108,7 @@ class _RestaurantState extends State<Restaurant> {
             );
           }),
         ),
-      )
-    );
+      );
   }
 }
 
@@ -108,12 +127,12 @@ enum Category {
 }
 
 enum Plate {
-  pouce(title: 'Pouce', image: 'pouce.png', price: 4.50, description: 'Un pouce bien grillé à la graisse humaine', category: Category.entree),
-  cartilage(title: 'Pignons de cartilage', image: 'cartilage.png', price: 5.50, description: 'Des pignons de cartilage de nez, rôti à la broche', category: Category.entree),
-  mollet(title: 'Mollet', image: 'mollet.png', price: 13.50, description: 'Un bon mollet poêlé accompagné d\'une salade de cheveux blond', category: Category.plat),
-  ribs(title: 'Ribs', image: 'ribs.png', price: 14.50, description: 'Des ribs de côtes cuites au grill accompagné d\'une mixture d\'ongle sués', category: Category.plat),
-  oreille(title: 'Crème d\'oreille', image: 'oreille.png', price: 6.50, description: 'Une crème d\'oreilles caramélisées avec du pain brioché', category: Category.dessert),
-  graisse(title: 'Glace à la graisse', image: 'graisse.png', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert);
+  pouce(title: 'Pouce', image: 'https://static.vecteezy.com/system/resources/thumbnails/009/308/374/small_2x/thumb-up-on-transparent-background-file-png.png', price: 4.50, description: 'Un pouce bien grillé à la graisse humaine', category: Category.entree),
+  cartilage(title: 'Pignons de cartilage', image: 'https://cdn.3d4medical.com/complete_anatomy-userdata/video-sticky/61/326c4900eb.webp', price: 5.50, description: 'Des pignons de cartilage de nez, rôti à la broche', category: Category.entree),
+  mollet(title: 'Mollet', image: 'https://www.osteopathes.paris/wp-content/uploads/2022/12/Douleur-mollet.png', price: 13.50, description: 'Un bon mollet poêlé accompagné d\'une salade de cheveux blond', category: Category.plat),
+  ribs(title: 'Ribs de côtes', image: 'https://lh5.googleusercontent.com/proxy/6ldecagohf34CCDVnPzIwimkSek1MUpC3N7O61sQa-7AwZBqxCnTInkGG9O_GQGkiNub3RsWqEPE8Bbupc6e-KIjKg', price: 14.50, description: 'Des ribs de côtes cuites au grill accompagné d\'une mixture d\'ongle sués', category: Category.plat),
+  oreille(title: 'Crème d\'oreille', image: 'https://static.vecteezy.com/system/resources/previews/046/340/292/non_2x/ear-clipart-design-illustration-free-png.png', price: 6.50, description: 'Une crème d\'oreilles caramélisées avec du pain brioché', category: Category.dessert),
+  graisse(title: 'Glace à la graisse', image: 'https://www.chirurgie-plastique-france.com/wp-content/uploads/2022/05/liposuccion-ventre-marseille.webp', price: 5.50, description: 'Une glace de graisse, saveurs disponibles: américains, allemands, et français.', category: Category.dessert);
 
 
   final String title;
